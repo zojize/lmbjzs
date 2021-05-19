@@ -84,9 +84,11 @@ export default createConfig<UserConfig, 'lib' | 'page'>(
     {
         build: {
             root: mode({ lib: '.', page: 'page' }),
+            base: './',
             build: {
                 outDir: mode({ lib: 'lib', page: '../dist' }),
                 emptyOutDir: true,
+                assetsDir: mode({ lib: void 0, page: 'resources' }),
                 lib: mode({
                     lib: {
                         name: 'lmbjzs',
