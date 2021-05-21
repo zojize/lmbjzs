@@ -6,9 +6,17 @@ import path from 'path';
 
 const ConfigMode = Symbol();
 
-function mode<M extends string, T extends Record<M, unknown>>(
+interface ModeFn<
+    T extends Record<string, unknown>,
+    M extends keyof T & string,
+> {
+    <K extends M>(mode: K): T[K];
+    <K extends string>(mode: K): T[K];
+}
+
+function mode<T extends Record<string, unknown>, M extends keyof M & string>(
     table: T,
-): <K extends M>(mode: K) => T[K] {
+): ModeFn<T, M> {
     function fn<K extends M>(mode: K): T[K] {
         return table[mode];
     }
@@ -88,13 +96,12 @@ export default createConfig<UserConfig, 'lib' | 'page'>(
             build: {
                 outDir: mode({ lib: 'lib', page: '../dist' }),
                 emptyOutDir: true,
-                assetsDir: mode({ lib: void 0, page: 'resources' }),
+                assetsDir: mode({ page: 'resources' }),
                 lib: mode({
                     lib: {
                         name: 'lmbjzs',
                         entry: path.resolve(__dirname, 'src/index.ts'),
                     },
-                    page: void 0,
                 }),
             },
         },
