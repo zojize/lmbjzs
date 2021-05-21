@@ -22,10 +22,9 @@
 
 <script lang="ts" setup>
 import { ref, computed, customRef, triggerRef, watch, shallowRef, watchEffect } from "vue";
-import { SVGTextToDataURL } from "./utils";
 import parse from "../src";
-import bread from "./assets/bread.svg?raw";
-import cheese from "./assets/cheese.svg?raw";
+import bread from "./assets/bread.svg";
+import cheese from "./assets/cheese.svg";
 
 
 type BreadAndCheese = ("面包" | "芝士")[];
@@ -37,8 +36,8 @@ interface ParsedResult {
 }
 
 const bgMap = ref({
-    面包: SVGTextToDataURL(bread),
-    芝士: SVGTextToDataURL(cheese),
+    面包: bread,
+    芝士: cheese,
 });
 
 const input = ref("两面包夹芝士");
@@ -55,7 +54,7 @@ const parsedResult = customRef<BreadAndCheese[]>((track, trigger) => ({
         try {
             lastParsedResult = parse(input.value).array
         } catch (e) {
-            console.log(e);
+            console.error(e);
         }
         track();
         const parsed = ((x: any): x is BreadAndCheese => typeof x[0] === 'string')(lastParsedResult)
@@ -79,7 +78,9 @@ watchEffect(() => {
         if (!randomAngles.value[i]) randomAngles.value[i] = [];
         const len = arr[i].length;
         for (let j = 0; j < len; j++) {
-            if (!randomAngles.value[i][j]) randomAngles.value[i][j] = `${['+', '-'][+(Math.random() > 0.5)]}${(Math.random() * 45)}deg`;
+            if (!randomAngles.value[i][j])
+                randomAngles.value[i][j] = `${['+', '-']
+                    [+(Math.random() > 0.5)]}${(Math.random() * 45)}deg`;
         }
         randomAngles.value[i].splice(len, Infinity);
     }
