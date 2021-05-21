@@ -2,6 +2,8 @@
 
 一个简单的两面包夹芝士解析器。
 
+[demo](https://sigusr97.github.io/lmbjzs/)
+
 ## TODO
 
 - 完善UI
